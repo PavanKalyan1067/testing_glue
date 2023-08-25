@@ -27,7 +27,7 @@ S3bucket_node1 = glueContext.create_dynamic_frame.from_options(
 alarm_df = S3bucket_node1.toDF()
 events_df = spark.read.parquet("s3://test.processing.for.glue.prod/events/")
 final_df1 = alarm_df.join(events_df,alarm_df.alarmid ==  events_df.alarmid,"left")
-final_df1.show(1)
+final_df1.show(10)
 
 final_dynamic_frame = DynamicFrame.fromDF(final_df1, glueContext, "final_dynamic_frame")
 
