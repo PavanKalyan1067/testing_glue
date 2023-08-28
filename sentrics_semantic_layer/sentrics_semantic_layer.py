@@ -231,6 +231,16 @@ alarms = alarms.select("alarmid",
 alarms.dropDuplicates()
 alarms.show(10, truncate = False)
 alarms.printSchema()
+# Filter out alarms with acceptance time less than 5 seconds (0.0833 minutes)
+alarms = alarms.filter(col("acceptance_time") > 0.08333)
 
+# Show the filtered DataFrame
+alarms.show(10, truncate = False)
+# Creating a separate table for alarms that haven’t been responded to for 2+ hours.
+alarms_outliers = alarms.filter(col("acceptance_time") >= 120)
+
+# Show the filtered DataFrame
+alarms_outliers.show(10, truncate = False)
+alarms = alarms.filter(col("acceptance_time") >= 120)
 # spark.stop()
 job.commit()
