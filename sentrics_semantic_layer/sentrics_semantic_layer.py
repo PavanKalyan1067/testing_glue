@@ -238,30 +238,27 @@ alarms = alarms.filter(col("acceptance_time") > 0.08333)
 
 # Show the filtered DataFrame
 # alarms.show(10, truncate = False)
-# Creating a separate table for alarms that haven’t been responded to for 2+ hours.
-alarms_outliers = alarms.filter(col("acceptance_time") >= 120)
-
-# Show the filtered DataFrame
-# alarms_outliers.show(10, truncate = False)
-alarms_less_than_2_hr = alarms.filter(col("acceptance_time") < 120)
-# alarms_less_than_2_hr.show(10, truncate = False)
 # Filtering alarms that have both open and close dates; i.e. exclude 'openedat' and 'closedat' that null values
 alarms = alarms.filter( (col("openedat").isNotNull()) | (col("closedat").isNotNull()))
 
 # Show the filtered DataFrame
 # alarms.show(10, truncate = False)
-alarms_less_than_2_hr = alarms_less_than_2_hr.filter( (col("openedat").isNotNull()) | (col("closedat").isNotNull()))
-# alarms_less_than_2_hr.show(10, truncate = False)
-alarms_facility_community= alarms.join(facilities_df.select("communityid","facility"),"communityid").join(community.select("communityid","communityname"),"communityid")
-alarms_facility_community.dropDuplicates()
+alarms= alarms.join(facilities_df.select("communityid","facility"),"communityid").join(community.select("communityid","communityname"),"communityid")
+alarms.dropDuplicates()
 
 # Filter out records that don't have "QA" or "Dev" in the facility and community columns 
-alarms_facility_community = alarms_facility_community.filter(~(col("facility").like("%QA%") | col("facility").like("%Dev%")) & ~(col("communityname").like("%QA%") | col("communityname").like("%Dev%"))) 
+alarms = alarms.filter(~(col("facility").like("%QA%") | col("facility").like("%Dev%")) & ~(col("communityname").like("%QA%") | col("communityname").like("%Dev%"))) 
 
 # Show the filtered DataFrame
-# alarms_facility_community.show(10, truncate = False)
-# alarms_facility_community.printSchema()
-alarms_1 = alarms_facility_community.select("alarmid",
+# alarms.show(10, truncate = False)
+# alarms.printSchema()
+# Creating a separate table for alarms that haven’t been responded to for 2+ hours.
+alarms_outliers = alarms.filter(col("acceptance_time") >= 120)
+alarms = alarms.filter(col("acceptance_time") < 120)
+
+# Show the filtered DataFrame
+# alarms_outliers.show(10, truncate = False)
+alarms = alarms.select("alarmid",
                         "communityid",
                         "residentid",
                         "locationkey",
@@ -298,17 +295,9 @@ alarms_1 = alarms_facility_community.select("alarmid",
                          "transit+caregiver_time_thresholds",
                          "resolution_time_thresholds"
                         )
-# alarms_1.show(10, truncate = False)
-# alarms_1.printSchema()
-alarms_less_than_2_hr_filtered = alarms_less_than_2_hr.join(facilities_df.select("communityid","facility"),"communityid").join(community.select("communityid","communityname"),"communityid")
-alarms_less_than_2_hr_filtered.dropDuplicates()
-
-# Filter out records that don't have "QA" or "Dev" in the facility and community columns 
-alarms_less_than_2_hr_filtered = alarms_less_than_2_hr_filtered.filter(~(col("facility").like("%QA%") | col("facility").like("%Dev%")) & ~(col("communityname").like("%QA%") | col("communityname").like("%Dev%"))) 
-
-# alarms_less_than_2_hr_filtered.show(10, truncate = False)
-# alarms_less_than_2_hr_filtered.printSchema()
-alarms_2 = alarms_less_than_2_hr_filtered.select("alarmid",
+# alarms.show(10, truncate = False)
+# alarms.printSchema()
+alarms_outliers = alarms_outliers.select("alarmid",
                         "communityid",
                         "residentid",
                         "locationkey",
@@ -345,13 +334,13 @@ alarms_2 = alarms_less_than_2_hr_filtered.select("alarmid",
                          "transit+caregiver_time_thresholds",
                          "resolution_time_thresholds"
                         )
-# alarms_2.show(10, truncate = False)
-# alarms_2.printSchema()
-resident.write.parquet("s3://test.processing.for.glue.prod.output/resident/")
-events.write.parquet("s3://test.processing.for.glue.prod.output/events/")
-community.write.parquet("s3://test.processing.for.glue.prod.output/community/")
-location.write.parquet("s3://test.processing.for.glue.prod.output/location/")
-alarms_1.write.parquet("s3://test.processing.for.glue.prod.output/alarms_orignal/")
-alarms_2.write.parquet("s3://test.processing.for.glue.prod.output/alarms_less_than_2hr/")
+# alarms_outliers.show(10, truncate = False)
+# alarms_outliers.printSchema()
+resident.write.parquet("s3://sentrics-semantic-layer/resident/")
+events.write.parquet("s3://sentrics-semantic-layer/events/")
+community.write.parquet("s3://sentrics-semantic-layer/community/")
+location.write.parquet("s3://sentrics-semantic-layer/location/")
+alarms.write.parquet("s3://sentrics-semantic-layer/alarms/")
+alarms_outliers.write.parquet("s3://sentrics-semantic-layer/alarms_outliers/")
 # spark.stop()
 job.commit()
