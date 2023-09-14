@@ -52,7 +52,7 @@ The script creates dimension and fact tables by joining and selecting fields fro
 
 - Community Dimension Table: Derived by joining 'events_df' with 'sfdc_df'.
 
-- Alarms Fact Table: Selected fields from 'alarms_df' with additional calculated fields.
+- Alarms Fact Table: Selected fields from 'alarms_df' with additional calculated fields including 'earliest_event_date', 'earliest_event_id', 'acceptance_time', 'transit+caregiver_time', 'resolution_time', 'alarms_shift', 'is_night', and more.
 
 ## Data Filtering
 
