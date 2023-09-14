@@ -1,7 +1,3 @@
-Here is a README.md file based on the provided Python script:
-
----
-
 # Semantic Layer Creation
 
 ## Overview
