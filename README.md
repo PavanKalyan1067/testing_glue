@@ -57,10 +57,11 @@ The script creates dimension and fact tables by joining and selecting fields fro
 ## Data Filtering
 
 The script applies filtering rules to the 'alarms' table, excluding specific records based on the following conditions:
-- 1.Filter out records with acceptance time less than 5 seconds (0.0833 minutes)
-- 2.Filter out records where 'openedat' and 'closedat' is null
-- 3.Filter out records that don't have "QA" or "Dev" in the facility and community columns
+- 1.Filter out records with acceptance time less than 5 seconds.
+- 2.Filter out records where 'openedat' and 'closedat' is null.
+- 3.Filter out records that don't have "QA" or "Dev" in the facility and community columns.
 - 4.Create a separate table for alarms that have acceptance time 2+ hours.
+- 
 ## Writing to S3 Buckets
 
 Finally, the script converts DataFrames into Dynamic Frames and writes them to corresponding S3 buckets as Parquet files.
