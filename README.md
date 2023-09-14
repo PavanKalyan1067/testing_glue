@@ -24,9 +24,9 @@ The script begins by importing essential modules and setting up the Spark and Gl
 
 The script reads data from multiple sources stored in S3 buckets. It performs pre-processing on each DataFrame to prepare the data for further analysis:
 
-- Alarm Data: Reads 'alarm' data, excludes milliseconds from timestamp columns, and renames columns.
+- Alarm Data: Reads 'alarm' data.
 
-- Event Data: Reads 'events' data, excludes milliseconds from timestamp columns, and renames columns.
+- Event Data: Reads 'events' data.
 
 - Location Data: Reads 'locations' data.
 
@@ -34,7 +34,11 @@ The script reads data from multiple sources stored in S3 buckets. It performs pr
 
 - SFDC Data: Reads 'sfdc' data.
 
-- Facilities Data: Reads 'facilities' data, excludes milliseconds from timestamp columns, and renames columns.
+- Facilities Data: Reads 'facilities' data.
+
+## Data Pre-processing
+
+The script preprocesses each DataFrame by excluding milliseconds from timestamp columns. It performs these operations for each DataFrame separately.
 
 ## Semantic Tables Creation
 
