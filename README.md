@@ -61,7 +61,7 @@ The script applies filtering rules to the 'alarms' table, excluding specific rec
 - 2.Filter out records where 'openedat' and 'closedat' is null.
 - 3.Filter out records that don't have "QA" or "Dev" in the facility and community columns.
 - 4.Create a separate table for alarms that have acceptance time 2+ hours.
-- 
+
 ## Writing to S3 Buckets
 
 Finally, the script converts DataFrames into Dynamic Frames and writes them to corresponding S3 buckets as Parquet files.
